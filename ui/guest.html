@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, viewport-fit=cover"
+		>
+		<meta name="theme-color" content="#171717">
+		<title>Ryu Room</title>
+		<style>
+		:root {
+			--font-sans:
+				"Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+			--font-heading:
+				"Geist Variable", "Geist", ui-sans-serif, system-ui, sans-serif;
+			--background: oklch(0.145 0 0);
+			--foreground: oklch(0.985 0 0);
+			--card: oklch(0.205 0 0);
+			--primary: #0099ff;
+			--primary-foreground: oklch(0.205 0 0);
+			--muted: oklch(0.269 0 0);
+			--muted-foreground: oklch(0.708 0 0);
+			--border: rgb(255 255 255 / 10%);
+			--input: rgb(255 255 255 / 15%);
+			--ring: oklch(0.708 0 0);
+			--destructive: oklch(0.704 0.191 22.216);
+			--radius: 0.625rem;
+			color-scheme: dark;
+		}
+		* {
+			box-sizing: border-box;
+		}
+		html {
+			color-scheme: dark;
+		}
+		body {
+			min-height: 100vh;
+			margin: 0;
+			font-family: var(--font-sans);
+			font-size: 14px;
+			-webkit-font-smoothing: antialiased;
+			line-height: 1.45;
+			color: var(--foreground);
+			background: var(--background);
+		}
+		main {
+			width: min(720px, 100%);
+			padding: 16px 16px calc(28px + env(safe-area-inset-bottom));
+			margin: auto;
+		}
+		header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			min-height: 48px;
+			padding: 0 4px 12px;
+			margin-bottom: 24px;
+			border-bottom: 1px solid var(--border);
+		}
+		.brand {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			font-weight: 500;
+			letter-spacing: -0.02em;
+		}
+		.mark {
+			display: grid;
+			place-items: center;
+			width: 28px;
+			height: 28px;
+			font-family: var(--font-heading);
+			font-size: 12px;
+			font-weight: 500;
+			color: var(--primary-foreground);
+			background: var(--primary);
+			border-radius: var(--radius);
+		}
+		.status {
+			font-size: 12px;
+			color: var(--muted-foreground);
+		}
+		.card {
+			background: var(--card);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			box-shadow: 0 12px 32px rgb(0 0 0 / 20%);
+		}
+		.welcome {
+			padding: 26px;
+		}
+		.kicker {
+			margin: 0 0 8px;
+			font-size: 11px;
+			font-weight: 500;
+			color: var(--primary);
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+		}
+		h1,
+		h2 {
+			margin: 0;
+			font-family: var(--font-heading);
+			font-weight: 500;
+			line-height: 1.05;
+			letter-spacing: -0.045em;
+			text-wrap: balance;
+		}
+		h1 {
+			font-size: clamp(30px, 7vw, 42px);
+		}
+		h2 {
+			font-size: 20px;
+		}
+		p {
+			line-height: 1.55;
+			color: var(--muted-foreground);
+		}
+		form {
+			display: grid;
+			gap: 11px;
+			margin-top: 22px;
+		}
+		label {
+			display: grid;
+			gap: 7px;
+			font-size: 13px;
+			color: var(--muted-foreground);
+		}
+		input,
+		textarea,
+		button {
+			font: inherit;
+		}
+		input,
+		textarea {
+			width: 100%;
+			min-height: 36px;
+			padding: 8px 12px;
+			color: var(--foreground);
+			outline: none;
+			background: var(--background);
+			border: 1px solid var(--input);
+			border-radius: var(--radius);
+		}
+		input:focus-visible,
+		textarea:focus-visible,
+		button:focus-visible {
+			outline: 2px solid color-mix(in oklch, var(--ring) 70%, transparent);
+			outline-offset: 2px;
+			border-color: var(--primary);
+		}
+		button {
+			min-height: 36px;
+			padding: 8px 13px;
+			font-weight: 500;
+			color: var(--primary-foreground);
+			cursor: pointer;
+			background: var(--primary);
+			border: 1px solid var(--primary);
+			border-radius: var(--radius);
+			transition:
+				background-color 120ms ease,
+				border-color 120ms ease,
+				transform 120ms ease;
+		}
+		button:hover:not(:disabled) {
+			background: color-mix(in oklab, var(--primary) 86%, black);
+		}
+		button:active:not(:disabled) {
+			transform: translateY(1px);
+		}
+		button:disabled {
+			cursor: wait;
+			opacity: 0.5;
+		}
+		.error {
+			min-height: 20px;
+			font-size: 13px;
+			color: var(--destructive);
+		}
+		[hidden] {
+			display: none !important;
+		}
+		.room {
+			display: grid;
+			gap: 14px;
+		}
+		.room-head {
+			display: flex;
+			gap: 12px;
+			justify-content: space-between;
+			padding: 17px 20px;
+		}
+		.model {
+			margin-top: 6px;
+			font-size: 12px;
+			color: var(--muted-foreground);
+			overflow-wrap: anywhere;
+		}
+		.pill {
+			padding: 5px 8px;
+			font-size: 10px;
+			color: var(--primary);
+			text-transform: uppercase;
+			letter-spacing: 0.07em;
+			border: 1px solid color-mix(in oklch, var(--primary) 42%, transparent);
+			border-radius: 99px;
+		}
+		.transcript {
+			min-height: 280px;
+			max-height: 58vh;
+			padding: 4px 15px 12px;
+			overflow: auto;
+		}
+		.empty {
+			display: grid;
+			place-items: center;
+			min-height: 250px;
+			color: var(--muted-foreground);
+			text-align: center;
+		}
+		.message {
+			display: grid;
+			grid-template-columns: 27px minmax(0, 1fr);
+			gap: 10px;
+			padding: 13px 5px;
+			border-bottom: 1px solid #fff0;
+		}
+		.message + .message {
+			border-top: 1px solid #fff0;
+		}
+		.avatar {
+			display: grid;
+			place-items: center;
+			width: 27px;
+			height: 27px;
+			font-size: 10px;
+			font-weight: 500;
+			color: var(--muted-foreground);
+			background: var(--muted);
+			border-radius: var(--radius);
+		}
+		.user .avatar {
+			color: var(--primary-foreground);
+			background: var(--primary);
+		}
+		.role {
+			margin: 1px 0 5px;
+			font-size: 10px;
+			font-weight: 500;
+			color: var(--muted-foreground);
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+		}
+		.text {
+			line-height: 1.55;
+			overflow-wrap: anywhere;
+			white-space: pre-wrap;
+		}
+		.composer {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) auto;
+			gap: 9px;
+			align-items: end;
+			padding: 13px;
+		}
+		textarea {
+			min-height: 44px;
+			max-height: 140px;
+			resize: vertical;
+		}
+		.foot {
+			margin: 0 2px;
+			font-size: 11px;
+			text-align: center;
+		}
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			white-space: nowrap;
+			border: 0;
+			clip: rect(0, 0, 0, 0);
+		}
+		@media (max-width: 470px) {
+			main {
+				padding-inline: 12px;
+			}
+			.welcome {
+				padding: 20px;
+			}
+			.composer {
+				grid-template-columns: 1fr;
+			}
+			.composer button {
+				width: 100%;
+			}
+		}
+		</style>
+	</head>
+	<body>
+		<main>
+			<header>
+				<div class="brand">
+					<span class="mark">R</span><span>Ryu Room</span>
+				</div>
+				<span id="connection" class="status" aria-live="polite"
+					>Invite-only</span
+				>
+			</header>
+			<section id="join" class="card welcome">
+				<p class="kicker">Shared model room</p>
+				<h1>Join the conversation.</h1>
+				<p>
+					This room runs on the host's active Ryu node. Your prompt and the
+					synchronized transcript travel through this session; node credentials
+					stay with the host.
+				</p>
+				<form id="join-form">
+					<label for="name"
+						>Your name<input
+							id="name"
+							maxlength="80"
+							autocomplete="name"
+							name="displayName"
+							type="text"
+							spellcheck="false"
+							placeholder="e.g. Jiawei…"
+							required
+						></label
+					><button id="join-button">Join room</button>
+					<div
+						id="join-error"
+						class="error"
+						role="status"
+						aria-live="polite"
+					></div>
+				</form>
+			</section>
+			<section id="room" class="room" hidden>
+				<div class="card room-head">
+					<div>
+						<p class="kicker">Live room</p>
+						<h2 id="room-title">Room</h2>
+						<div id="model" class="model"></div>
+					</div>
+					<span id="room-status" class="pill">idle</span>
+				</div>
+				<div id="transcript" class="card transcript">
+					<div class="empty">The room is ready. Send the first prompt.</div>
+				</div>
+				<form id="turn-form" class="card composer">
+					<textarea
+						id="prompt"
+						name="prompt"
+						aria-label="Message to room"
+						maxlength="16000"
+						placeholder="Ask the room…"
+						required
+					></textarea><button id="send">Send</button>
+				</form>
+				<div
+					id="turn-error"
+					class="error"
+					role="status"
+					aria-live="polite"
+				></div>
+				<p class="foot">
+					The host's active node runs the model. This phone is a client; it does
+					not download weights or compute the response.
+				</p>
+			</section>
+		</main>
+		<script>
+		"use strict";
+		(() => {
+			const api = "/api/rooms";
+			const join = document.querySelector("#join");
+			const room = document.querySelector("#room");
+			const transcript = document.querySelector("#transcript");
+			const connection = document.querySelector("#connection");
+			const status = document.querySelector("#room-status");
+			let current = null;
+			let partial = "";
+			let source = null;
+			const errorText = (node, text) => {
+				node.textContent = text || "";
+			};
+			const call = async (path, init) => {
+				const response = await fetch(api + path, {
+					credentials: "include",
+					...init,
+					headers: {
+						"content-type": "application/json",
+						...(init?.headers || {}),
+					},
+				});
+				const value = await response.json().catch(() => ({}));
+				if (!response.ok) {
+					throw new Error(
+						value.message || "The room request was not accepted."
+					);
+				}
+				return value;
+			};
+			const message = (role, text) => {
+				const item = document.createElement("article");
+				item.className = `message ${role}`;
+				const avatar = document.createElement("div");
+				avatar.className = "avatar";
+				avatar.textContent = role === "user" ? "You" : "AI";
+				const wrap = document.createElement("div");
+				const label = document.createElement("div");
+				label.className = "role";
+				label.textContent = role === "user" ? "Prompt" : "Response";
+				const body = document.createElement("div");
+				body.className = "text";
+				body.textContent = text;
+				wrap.append(label, body);
+				item.append(avatar, wrap);
+				return item;
+			};
+			const render = () => {
+				if (!current) {
+					return;
+				}
+				document.querySelector("#room-title").textContent = current.id.slice(
+					0,
+					16
+				);
+				document.querySelector("#model").textContent = current.modelId;
+				status.textContent = current.status;
+				transcript.replaceChildren();
+				if (current.messages.length || partial) {
+					current.messages.forEach((item) =>
+						transcript.append(message(item.role, item.text))
+					);
+					if (partial) {
+						transcript.append(message("assistant", partial));
+					}
+				} else {
+					const empty = document.createElement("div");
+					empty.className = "empty";
+					empty.textContent = "The room is ready. Send the first prompt.";
+					transcript.append(empty);
+				}
+				transcript.scrollTop = transcript.scrollHeight;
+			};
+			const applySnapshot = (value) => {
+				if (value && value.contract === "rooms/1") {
+					current = value;
+					partial = "";
+					render();
+				}
+			};
+			const connect = () => {
+				source = new EventSource(`${api}/guest/events`);
+				source.addEventListener("open", () => {
+					connection.textContent = "Connected";
+					connection.style.color = "var(--primary)";
+				});
+				source.addEventListener("error", () => {
+					connection.textContent = "Reconnecting…";
+				});
+				source.addEventListener("snapshot", (event) =>
+					applySnapshot(JSON.parse(event.data))
+				);
+				source.addEventListener("turn.accepted", (event) => {
+					const value = JSON.parse(event.data);
+					applySnapshot(value.snapshot);
+				});
+				source.addEventListener("turn.delta", (event) => {
+					const value = JSON.parse(event.data);
+					partial = value.partialText || "";
+					status.textContent = "running";
+					render();
+				});
+				[
+					"turn.completed",
+					"turn.failed",
+					"turn.canceled",
+					"room.closed",
+				].forEach((name) =>
+					source.addEventListener(name, (event) => {
+						const value = JSON.parse(event.data);
+						if (value.snapshot) {
+							applySnapshot(value.snapshot);
+						}
+					})
+				);
+			};
+			document
+				.querySelector("#join-form")
+				.addEventListener("submit", async (event) => {
+					event.preventDefault();
+					const button = document.querySelector("#join-button");
+					button.disabled = true;
+					errorText(document.querySelector("#join-error"), "");
+					try {
+						const invite = new URLSearchParams(location.hash.slice(1)).get(
+							"invite"
+						);
+						if (!invite) {
+							throw new Error("This link does not contain an invite.");
+						}
+						const value = await call("/guest/exchange", {
+							method: "POST",
+							body: JSON.stringify({
+								invite,
+								displayName: document.querySelector("#name").value,
+							}),
+						});
+						history.replaceState(null, "", location.pathname);
+						join.hidden = true;
+						room.hidden = false;
+						applySnapshot(value.room);
+						connect();
+					} catch (cause) {
+						errorText(
+							document.querySelector("#join-error"),
+							cause.message || "The invite could not be used."
+						);
+					} finally {
+						button.disabled = false;
+					}
+				});
+			document
+				.querySelector("#turn-form")
+				.addEventListener("submit", async (event) => {
+					event.preventDefault();
+					const input = document.querySelector("#prompt");
+					const text = input.value.trim();
+					if (!(text && current) || current.status === "running") {
+						return;
+					}
+					const button = document.querySelector("#send");
+					button.disabled = true;
+					errorText(document.querySelector("#turn-error"), "");
+					try {
+						await call("/guest/turns", {
+							method: "POST",
+							body: JSON.stringify({
+								text,
+								idempotencyKey: `guest-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+							}),
+						});
+						input.value = "";
+					} catch (cause) {
+						errorText(
+							document.querySelector("#turn-error"),
+							cause.message || "The prompt was not accepted."
+						);
+					} finally {
+						button.disabled = false;
+						input.focus();
+					}
+				});
+			if (new URLSearchParams(location.hash.slice(1)).get("invite")) {
+				document.querySelector("#name").focus();
+			}
+		})();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "package": "rooms",
+  "scope": "partial",
+  "expectedRows": 10,
+  "selector": {
+    "spec": "e2e/rooms-companion.spec.ts",
+    "config": "e2e/rooms-companion.playwright.config.ts"
+  },
+  "evidenceBoundary": "Rendered Rooms browser behavior is exercised against deterministic in-memory host bridge and local HTTP fixtures. Assertions verify exact list reads, room selection state, guest invite exchange and prompt payloads, host prompt/stop/close requests, and clipboard output. No live Core, Rooms sidecar, realtime peer, model provider, or external service is contacted.",
+  "assertions": [
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/App.tsx",
+        "line": "199",
+        "component": "App",
+        "tag": "Button",
+        "events": "onClick"
+      },
+      "testTitle": "refreshes the room list and opens the selected room snapshot",
+      "assertionName": "Refresh rereads the active node collection before opening the new room snapshot.",
+      "assertionMarker": "Refresh rereads the active node's room collection"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/App.tsx",
+        "line": "216",
+        "component": "App",
+        "tag": "RyuAppListItem",
+        "events": "onClick"
+      },
+      "testTitle": "refreshes the room list and opens the selected room snapshot",
+      "assertionName": "Selecting a room shows the selected list snapshot and transcript.",
+      "assertionMarker": "Selecting the row opens that exact snapshot's transcript"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/GuestRoom.tsx",
+        "line": "54",
+        "component": "GuestRoom",
+        "tag": "RyuAppForm",
+        "events": "onSubmit"
+      },
+      "testTitle": "guest joins with the edited name and sends a prompt through the room session",
+      "assertionName": "Invite form submission exchanges the invite and displays the returned room.",
+      "assertionMarker": "The Join room button's native form action exchanges the invite"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/GuestRoom.tsx",
+        "line": "75",
+        "component": "GuestRoom",
+        "tag": "Input",
+        "events": "onChange"
+      },
+      "testTitle": "guest joins with the edited name and sends a prompt through the room session",
+      "assertionName": "The edited display name is sent with the invite exchange.",
+      "assertionMarker": "Name edits feed the actual invite exchange body"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/GuestRoom.tsx",
+        "line": "88",
+        "component": "GuestRoom",
+        "tag": "Button",
+        "events": ""
+      },
+      "testTitle": "guest joins with the edited name and sends a prompt through the room session",
+      "assertionName": "The Join room submit button performs the invite exchange.",
+      "assertionMarker": "The Join room button's native form action exchanges the invite"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/GuestRoom.tsx",
+        "line": "124",
+        "component": "GuestRoom",
+        "tag": "InputBar",
+        "events": "onChange"
+      },
+      "testTitle": "guest joins with the edited name and sends a prompt through the room session",
+      "assertionName": "Guest composer edits are submitted as the trimmed room turn and cleared after acceptance.",
+      "assertionMarker": "Guest composer input retains the edited prompt until it is accepted"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/RoomWorkbench.tsx",
+        "line": "310",
+        "component": "RoomWorkbench",
+        "tag": "InputBar",
+        "events": "onChange"
+      },
+      "testTitle": "host submits a prompt and copies the active invite URL",
+      "assertionName": "Host composer edits are trimmed into the room request and the returned fixture reply renders.",
+      "assertionMarker": "The controlled InputBar change becomes the exact prompt submitted by the host"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/RoomWorkbench.tsx",
+        "line": "332",
+        "component": "RoomWorkbench",
+        "tag": "Button",
+        "events": "onClick"
+      },
+      "testTitle": "stops the active generation and confirms closing the room",
+      "assertionName": "Stop generation sends the current run id and applies the stopped snapshot.",
+      "assertionMarker": "Stop generation"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/RoomWorkbench.tsx",
+        "line": "391",
+        "component": "RoomWorkbench",
+        "tag": "Button",
+        "events": "onClick"
+      },
+      "testTitle": "host submits a prompt and copies the active invite URL",
+      "assertionName": "Copy link writes the exact currently displayed invite URL to the clipboard.",
+      "assertionMarker": "Copy link"
+    },
+    {
+      "row": {
+        "package": "rooms",
+        "source_file": "apps-store/rooms/ui/src/RoomWorkbench.tsx",
+        "line": "446",
+        "component": "RoomWorkbench",
+        "tag": "Button",
+        "events": "onClick"
+      },
+      "testTitle": "stops the active generation and confirms closing the room",
+      "assertionName": "The dynamic destructive confirmation closes the selected room and refreshes the list.",
+      "assertionMarker": "The room close confirmation"
+    }
+  ]
+}

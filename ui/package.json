@@ -1,0 +1,39 @@
+{
+  "dependencies": {
+    "@hugeicons/core-free-icons": "^4.3.5",
+    "@hugeicons/react": "^1.1.10",
+    "@ryu/app-host": "workspace:*",
+    "@ryu/blocks": "workspace:*",
+    "@ryu/i18n": "workspace:*",
+    "@ryu/ui": "workspace:*",
+    "@toolwind/corner-shape": "0.0.8-3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "catalog:"
+  },
+  "description": "The Ryu Rooms companion: active-node shared model rooms with invite links and synchronized transcripts.",
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^21.0.4",
+    "@playwright/test": "^1.61.1",
+    "@ryu/config": "workspace:*",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^7.3.1",
+    "vite-plugin-singlefile": "^2.3.0"
+  },
+  "name": "@ryu/rooms-app",
+  "private": true,
+  "ryuCompanionInteractionMap": "e2e/companion-interactions.json",
+  "scripts": {
+    "build": "vite build && node scripts/build-guest.mjs",
+    "check-types": "tsc --noEmit && tsc --noEmit -p e2e/tsconfig.json",
+    "test": "bun test src --pass-with-no-tests && bun test e2e/interaction-map.test.mjs",
+    "test:e2e": "node ../../../apps/desktop/node_modules/@playwright/test/cli.js test --config=e2e/rooms-companion.playwright.config.ts"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

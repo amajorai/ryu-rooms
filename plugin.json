@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ryu.rooms",
+  "version": "0.1.0",
+  "description": "Shared model rooms hosted by your active Ryu node. Start a Mesh LLM session on the node, invite phones or browsers by QR, and keep the transcript synchronized without exposing node credentials.",
+  "author": {
+    "name": "Ryu",
+    "url": "https://ryuhq.com"
+  },
+  "homepage": "https://github.com/amajorai/ryu-rooms",
+  "repository": "https://github.com/amajorai/ryu-rooms",
+  "keywords": ["rooms", "chat", "mesh-llm", "multi-device", "qr"],
+  "extensions": {
+    "com.ryuhq.ryu": {
+      "id": "@ryu/rooms",
+      "displayName": "Rooms"
+    }
+  }
+}
